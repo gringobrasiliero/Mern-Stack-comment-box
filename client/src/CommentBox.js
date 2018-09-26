@@ -14,7 +14,7 @@ class CommentBox extends Component {
       <div className="container">
         <div className="comments">
           <h2>Comments:</h2>
-          <CommentList data={DATA} />
+          <CommentList data={this.state.data} />
         </div>
         <div className="form">
           <CommentForm />

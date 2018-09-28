@@ -18,11 +18,18 @@ class CommentBox extends Component {
         })
     }
     handleCommentSubmit = (comment) => {
-      fetch(this.props.url, comment)
-     .then(res => {
-       this.loadCommentsFromServer();
-     })
-     .catch(err => {
+      fetch(this.props.url, {
+      method: "POST",
+      headers: {
+          "Content-Type": "application/json; charset=utf-8",
+      },
+      redirect: "follow", // follows the redirect response
+      body: JSON.stringify(comment), // body data type must match "Content-Type" header
+  }).then(res => res.json())
+  .then(comment => {
+    this.loadCommentsFromServer();
+  })
+    .catch(err => {
        console.error(err);
      });
 
@@ -33,15 +40,6 @@ class CommentBox extends Component {
     }
 
 
-
-
-
-
-
-
-
-
-
   render() {
     return (
       <div className="container">
@@ -50,7 +48,7 @@ class CommentBox extends Component {
           <CommentList data={this.state.data} />
         </div>
         <div className="form">
-          <CommentForm />
+          <CommentForm onCommentSubmit={ this.handleCommentSubmit }/>
         </div>
       </div>
     );

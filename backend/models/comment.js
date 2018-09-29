@@ -8,6 +8,10 @@ const Schema = mongoose.Schema;
 const CommentsSchema = new Schema({
   author: String,
   text: String,
+  location: {
+   type: { type: String },
+   coordinates: []
+  },
 }, { timestamps: true });
 
 // export our module to use in server.js

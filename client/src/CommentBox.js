@@ -37,6 +37,12 @@ class CommentBox extends Component {
     componentDidMount() {
       this.loadCommentsFromServer();
       // setInterval(this.loadCommentsFromServer, this.props.pollInterval);
+      if (navigator.geolocation) { //check if geolocation is available
+                navigator.geolocation.getCurrentPosition(function(position){
+                  console.log(position);
+                  debugger
+                });
+            }
     }
 
 

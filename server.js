@@ -2,6 +2,7 @@
 'use strict'
 
 //first we import our dependencies...
+require('dotenv').config();
 var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
@@ -45,7 +46,7 @@ app.listen(port, function() {
 });
 
 //db config
-var mongoDB = 'mongodb://nolan:password1@ds127490.mlab.com:27490/form-box-testing-mongo';
+var mongoDB = process.env.DB_CONN;
 mongoose.connect(mongoDB, { useMongoClient: true })
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));

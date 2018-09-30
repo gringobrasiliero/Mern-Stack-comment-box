@@ -74,6 +74,7 @@ router.route('/comments')
     //body parser lets us use the req.body
     comment.author = req.body.author;
     comment.text = req.body.text;
+    comment.location = req.body.location;
 
     comment.save(function(err) {
       if (err)

@@ -15,14 +15,33 @@ class CommentForm extends Component {
   handleTextChange(e) {
     this.setState({ text: e.target.value });
   }
+
+  getLocation = () => {
+    fetch("http://maps.googleapis.com/maps/api/geocode/json?latlng="+ this.props.latitude + "," + this.props.longitude +"&sensor=false")
+      .then(res => res.json())
+      .then(location => {
+        console.log(location)
+      })
+  }
+
   handleSubmit(e) {
     e.preventDefault();
     let author = this.state.author.trim();
     let text = this.state.text.trim();
+    let latitude= this.props.lat;
+    let longitude= this.props.long;
+
     if (!text || !author) {
       return;
     }
-    this.props.onCommentSubmit({ author: author, text: text });
+    this.props.onCommentSubmit({ author: author,
+                                 text: text,
+                                 location:{
+                                  coordinates: [
+                                    longitude: longitude,
+                                    latitude: latitude,
+                                  ]
+                                 }});
     this.setState({ author: '', text: '' });
   }
   render() {

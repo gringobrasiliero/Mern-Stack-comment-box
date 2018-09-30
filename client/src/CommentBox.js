@@ -3,11 +3,16 @@ import CommentList from './CommentList';
 import CommentForm from './CommentForm';
 import DATA from './data';
 import './CommentBox.css';
+require('dotenv').config();
 
 class CommentBox extends Component {
   constructor(props) {
     super(props);
-    this.state = { data: [] };
+    this.state = {
+      data: [],
+      longitude: 0,
+      latitude: 0
+ };
   }
 
   loadCommentsFromServer = () => {
@@ -34,15 +39,41 @@ class CommentBox extends Component {
      });
 
     }
+
+
+getCoords = () => {
+  if (navigator.geolocation) { //check if geolocation is available
+            navigator.geolocation.getCurrentPosition(position =>{
+              console.log(position);
+              this.setState({
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+              });
+
+            });
+        }
+}
+
+
+getLocation = () => {
+  var key = process.env.key;
+
+  fetch("http://maps.googleapis.com/maps/api/geocode/json?latlng="+ this.state.latitude + "," + this.state.longitude +"&sensor=false&key=" + key )
+    .then(res => res.json())
+    .then(location => {
+      console.log(location)
+    })
+}
+
+
+
     componentDidMount() {
       this.loadCommentsFromServer();
       // setInterval(this.loadCommentsFromServer, this.props.pollInterval);
-      if (navigator.geolocation) { //check if geolocation is available
-                navigator.geolocation.getCurrentPosition(function(position){
-                  console.log(position);
-                  debugger
-                });
-            }
+      this.getCoords()
+      this.getLocation()
+      debugger
+
     }
 
 
@@ -54,7 +85,7 @@ class CommentBox extends Component {
           <CommentList data={this.state.data} />
         </div>
         <div className="form">
-          <CommentForm onCommentSubmit={ this.handleCommentSubmit }/>
+          <CommentForm onCommentSubmit={ this.handleCommentSubmit } lat={this.state.latitude} long={this.state.longitude}/>
         </div>
       </div>
     );
